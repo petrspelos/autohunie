@@ -481,4 +481,7 @@ $RECYCLE.BIN/
 
 # Custom ignore rules
 tokens/
-*.png
+full-board.png
+screenshot.png
+single-token.png
+Unreadable.png
