@@ -1,11 +1,12 @@
 ﻿using System.Drawing;
 using System.Drawing.Imaging;
 using AutoHunie.ConsoleApp;
+using AutoHunie.Core.Entities;
 
 Console.Clear();
 Logo.Draw();
 
-Windows.MoveWindow("HuniePop 2", 0, 0);
+WindowsApi.MoveWindow("HuniePop 2", 0, 0);
 
 var rect = new Rectangle(463, 139, 666, 518);
 Bitmap bmp = new Bitmap(rect.Width, rect.Height, PixelFormat.Format32bppArgb);

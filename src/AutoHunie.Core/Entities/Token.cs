@@ -1,12 +1,16 @@
 using System.Drawing;
 
-namespace AutoHunie.ConsoleApp;
+namespace AutoHunie.Core.Entities;
 
 public class Token
 {
     public Token(TokenType type)
     {
         Type = type;
+    }
+
+    public Token() : this (TokenType.Unknown)
+    {
     }
 
     public TokenType Type { get; }
@@ -73,4 +77,26 @@ public class Token
         TokenType.Stamina => Color.FromArgb(175, 183, 203),
         _ => throw new InvalidOperationException($"No prototype color for '{type}'")
     };
+
+    public static bool operator ==(Token obj1, Token obj2)
+    {
+        if (obj1 is null)
+            return obj2 is null;
+        
+        return obj1.Equals(obj2);
+    }
+
+    public static bool operator!= (Token obj1, Token obj2)
+    {
+        if (obj1 is null)
+            return obj2 is not null;
+        
+        return !obj1.Equals(obj2);
+    }
+
+    public override bool Equals(object? obj) => Equals(obj as Token);
+
+    public bool Equals(Token? other) => other is not null && other.Type == this.Type;
+
+    public override int GetHashCode() => HashCode.Combine(this.Type);
 }

@@ -1,5 +1,7 @@
 using System.Drawing;
 using System.Text;
+using AutoHunie.Core;
+using AutoHunie.Core.Entities;
 
 namespace AutoHunie.ConsoleApp;
 

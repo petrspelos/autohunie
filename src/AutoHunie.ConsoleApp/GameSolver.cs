@@ -1,5 +1,7 @@
 using System.Collections.ObjectModel;
+using AutoHunie.Core.Entities;
 using System.Drawing;
+using AutoHunie.Core;
 
 namespace AutoHunie.ConsoleApp;
 
@@ -332,12 +334,12 @@ public class AlmostMatch
     public TokenType TokenType { get; set; }
     public Direction Direction { get; set; }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         return Equals(obj as AlmostMatch);
     }
 
-    public bool Equals(AlmostMatch other)
+    public bool Equals(AlmostMatch? other)
     {
         return other != null &&
                X == other.X &&

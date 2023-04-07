@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
-internal static class Windows
+internal static class WindowsApi
 {
     /// <summary>
     /// Special window handles.

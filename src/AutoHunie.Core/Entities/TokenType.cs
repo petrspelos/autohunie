@@ -1,4 +1,4 @@
-namespace AutoHunie.ConsoleApp;
+namespace AutoHunie.Core;
 
 public enum TokenType
 {

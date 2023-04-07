@@ -5,6 +5,10 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoHunie.ConsoleApp", "AutoHunie.ConsoleApp\AutoHunie.ConsoleApp.csproj", "{03CB7E9D-65AA-4D21-90C7-85CC0F1DEE87}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoHunie.Tests", "AutoHunie.Tests\AutoHunie.Tests.csproj", "{46B43223-752D-4DA6-9EAA-897ECEDD1635}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoHunie.Core", "AutoHunie.Core\AutoHunie.Core.csproj", "{7AB64C37-2226-47D5-A940-0E7AADE75F38}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +22,13 @@ Global
 		{03CB7E9D-65AA-4D21-90C7-85CC0F1DEE87}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{03CB7E9D-65AA-4D21-90C7-85CC0F1DEE87}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{03CB7E9D-65AA-4D21-90C7-85CC0F1DEE87}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46B43223-752D-4DA6-9EAA-897ECEDD1635}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46B43223-752D-4DA6-9EAA-897ECEDD1635}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46B43223-752D-4DA6-9EAA-897ECEDD1635}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46B43223-752D-4DA6-9EAA-897ECEDD1635}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7AB64C37-2226-47D5-A940-0E7AADE75F38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7AB64C37-2226-47D5-A940-0E7AADE75F38}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7AB64C37-2226-47D5-A940-0E7AADE75F38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7AB64C37-2226-47D5-A940-0E7AADE75F38}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
