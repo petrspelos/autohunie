@@ -2,7 +2,8 @@ namespace AutoHunie.ConsoleApp;
 
 internal static class BitmapExtensions
 {
-    internal static int TileSize = 74;
+    internal static int TileSize = 86;
+    internal static int HalfTileSize = TileSize / 2;
 
     internal static void DrawStraightLine(this Bitmap bitmap, int fromX, int fromY, int toX, int toY, Color color, int thickness = 1)
     {

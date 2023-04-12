@@ -21,43 +21,43 @@ public class Token
         {
             case TokenType.Sexuality:
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.Write("[🔥]");
+                Console.Write("[SEX]");
                 break;
             case TokenType.Romance:
                 Console.ForegroundColor = ConsoleColor.DarkYellow;
-                Console.Write("[🌙]");
+                Console.Write("[RMC]");
                 break;
             case TokenType.Joy:
                 Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.Write("[🔔]");
+                Console.Write("[JOY]");
                 break;
             case TokenType.Flirtation:
                 Console.ForegroundColor = ConsoleColor.Green;
-                Console.Write("[🌟]");
+                Console.Write("[FLR]");
                 break;
             case TokenType.Sentiment:
                 Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.Write("[💧]");
+                Console.Write("[SNT]");
                 break;
             case TokenType.Talent:
                 Console.ForegroundColor = ConsoleColor.Blue;
-                Console.Write("[🎵]");
+                Console.Write("[TLT]");
                 break;
             case TokenType.BrokenHeart:
                 Console.ForegroundColor = ConsoleColor.DarkMagenta;
-                Console.Write("[💔]");
+                Console.Write("[BHT]");
                 break;
             case TokenType.Passion:
                 Console.ForegroundColor = ConsoleColor.Magenta;
-                Console.Write("[💗]");
+                Console.Write("[PSN]");
                 break;
             case TokenType.Stamina:
                 Console.ForegroundColor = ConsoleColor.Gray;
-                Console.Write("[⚡]");
+                Console.Write("[STM]");
                 break;
             case TokenType.Unknown:
                 Console.ForegroundColor = ConsoleColor.DarkGray;
-                Console.Write("[❔]");
+                Console.Write("[UNK]");
                 break;
         }
 

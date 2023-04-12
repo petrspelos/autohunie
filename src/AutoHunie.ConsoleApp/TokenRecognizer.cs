@@ -7,15 +7,16 @@ namespace AutoHunie.ConsoleApp;
 
 public class TokenRecognizer
 {
-    const int TokenCenter = 37;
+    const int TileSize = 86;
+    const int TokenCenter = TileSize / 2;
 
     public TokenType GetTokenTypeFromImage(Bitmap image)
     {
         var coords = new List<Tuple<int, int>>();
 
-        for (var i = 27; i < 47; i++)
+        for (var i = TokenCenter - 20; i < TokenCenter + 20; i++)
         {
-            for (var j = 27; j < 47; j++)
+            for (var j = TokenCenter - 20; j < TokenCenter + 20; j++)
             {
                 coords.Add(new (i, j));
             }
@@ -25,15 +26,15 @@ public class TokenRecognizer
 
         var color = image.GetPixel(TokenCenter, TokenCenter);
         
-        for (var i = 0; i < 72; i++)
+        for (var i = 0; i < TileSize; i++)
         {
-            for (var j = 0; j < 20; j++)
+            for (var j = 0; j < 40; j++)
             {
                 image.SetPixel(i, j, color);
             }
         }
 
-        for (var i = 27; i < 47; i++)
+        for (var i = TokenCenter - 20; i < TokenCenter + 20; i++)
         {
             image.SetPixel(26, i, Color.Red);
             image.SetPixel(48, i, Color.Red);

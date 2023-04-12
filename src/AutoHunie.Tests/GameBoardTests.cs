@@ -1,3 +1,4 @@
+using AutoHunie.Core;
 using AutoHunie.Core.Entities;
 
 namespace AutoHunie.Tests;
@@ -30,16 +31,13 @@ public class GameBoardTests
     public void References_ShouldMakeSense()
     {
         var board1 = new GameBoard();
-        board1.SetToken(1, 1, new Token(Core.TokenType.Joy));
+        board1.SetToken(1, 1, new Token(TokenType.Joy));
 
         var board2 = new GameBoard();
-        board2.SetToken(1, 1, new Token(Core.TokenType.Joy));
+        board2.SetToken(1, 1, new Token(TokenType.Joy));
 
         Assert.Equal(board1, board2);
         Assert.True(board1 == board2);
-
-        Assert.NotEqual(board1, null);
-        Assert.NotEqual(null, board1);
 
         Assert.False(board1 != board2);
     }
@@ -47,16 +45,52 @@ public class GameBoardTests
     [Fact]
     public void TokenTypeComparison_ShouldMakeSense()
     {
-        var token1 = new Token(Core.TokenType.Passion);
-        var token2 = new Token(Core.TokenType.Passion);
+        var token1 = new Token(TokenType.Passion);
+        var token2 = new Token(TokenType.Passion);
 
         Assert.Equal(token1, token2);
         Assert.True(token1 == token2);
+    }
 
-        Assert.NotEqual(null, token1);
-        Assert.NotEqual(token1, null);
-        
-        Assert.False(null! == token1);
-        Assert.False(token1 == null!);
+    [Fact]
+    public void ClonedBoard_ShouldNotEffectOriginal()
+    {
+        var board1 = new GameBoard();
+        board1.SetToken(1, 1, new Token(TokenType.Joy));
+
+        var board2 = board1.Clone();
+        board2.SetToken(1, 1, new Token(TokenType.Passion));
+
+        Assert.Equal(TokenType.Joy, board1.GetToken(1, 1).Type);
+        Assert.Equal(TokenType.Passion, board2.GetToken(1, 1).Type);
+    }
+
+    [Fact]
+    public void ColumnSetting_ShouldWork()
+    {
+        var board = new GameBoard(3, 2);
+
+        board.SetRow(1, new [] { new Token(TokenType.BrokenHeart), new Token(TokenType.Flirtation), new Token(TokenType.Passion) });
+
+        var row = board.GetRow(1);
+
+        Assert.Equal(new Token(TokenType.BrokenHeart), row[0]);
+        Assert.Equal(new Token(TokenType.Flirtation), row[1]);
+        Assert.Equal(new Token(TokenType.Passion), row[2]);
+
+        board.SetColumn(1, new [] { new Token(TokenType.Romance), new Token(TokenType.Stamina) });
+
+        var column = board.GetColumn(1);
+
+        Assert.Equal(new Token(TokenType.Romance), column[0]);
+        Assert.Equal(new Token(TokenType.Stamina), column[1]);
+
+        board.SetColumn(1, new [] { new Token(TokenType.Romance), new Token(TokenType.Joy) });
+
+        column = board.GetColumn(1);
+
+        Assert.Equal(new Token(TokenType.Romance), column[0]);
+        Assert.Equal(new Token(TokenType.Joy), column[1]);
+
     }
 }

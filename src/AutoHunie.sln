@@ -3,19 +3,18 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoHunie.ConsoleApp", "AutoHunie.ConsoleApp\AutoHunie.ConsoleApp.csproj", "{03CB7E9D-65AA-4D21-90C7-85CC0F1DEE87}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoHunie.ConsoleApp", "AutoHunie.ConsoleApp\AutoHunie.ConsoleApp.csproj", "{03CB7E9D-65AA-4D21-90C7-85CC0F1DEE87}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoHunie.Tests", "AutoHunie.Tests\AutoHunie.Tests.csproj", "{46B43223-752D-4DA6-9EAA-897ECEDD1635}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoHunie.Tests", "AutoHunie.Tests\AutoHunie.Tests.csproj", "{46B43223-752D-4DA6-9EAA-897ECEDD1635}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoHunie.Core", "AutoHunie.Core\AutoHunie.Core.csproj", "{7AB64C37-2226-47D5-A940-0E7AADE75F38}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoHunie.Core", "AutoHunie.Core\AutoHunie.Core.csproj", "{7AB64C37-2226-47D5-A940-0E7AADE75F38}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoHunie.WinForms.Playground", "AutoHunie.WinForms.Playground\AutoHunie.WinForms.Playground.csproj", "{F004848A-ED0A-4BD3-8DBB-72728C6B6157}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{03CB7E9D-65AA-4D21-90C7-85CC0F1DEE87}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -30,5 +29,12 @@ Global
 		{7AB64C37-2226-47D5-A940-0E7AADE75F38}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7AB64C37-2226-47D5-A940-0E7AADE75F38}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7AB64C37-2226-47D5-A940-0E7AADE75F38}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F004848A-ED0A-4BD3-8DBB-72728C6B6157}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F004848A-ED0A-4BD3-8DBB-72728C6B6157}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F004848A-ED0A-4BD3-8DBB-72728C6B6157}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F004848A-ED0A-4BD3-8DBB-72728C6B6157}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal

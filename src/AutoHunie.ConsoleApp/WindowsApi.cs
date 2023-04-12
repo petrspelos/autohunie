@@ -134,10 +134,46 @@ internal static class WindowsApi
         return hWnd;
     }
 
-    internal static void MoveWindow(string windowTitle, int x, int y)
+    internal static void MoveWindow(string windowTitle, int x, int y, int width = 1270, int height = 745)
     {
         var handle = GetWindowHandleByTitle(windowTitle);
 
-        SetWindowPos(handle, 0, x, y, 1600 - 330, 900 - 155, SetWindowPosFlags.DrawFrame);
+        SetWindowPos(handle, 0, x, y, width, height, SetWindowPosFlags.DrawFrame);
+    }
+
+    [DllImport("user32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
+    internal static extern void mouse_event(long dwFlags, long dx, long dy, long cButtons, long dwExtraInfo);
+
+    private const int MOUSEEVENTF_LEFTDOWN = 0x02;
+    private const int MOUSEEVENTF_LEFTUP = 0x04;
+    private const int MOUSEEVENTF_RIGHTDOWN = 0x08;
+    private const int MOUSEEVENTF_RIGHTUP = 0x10;
+
+    internal static void DoMouseClick()
+    {
+        mouse_event(MOUSEEVENTF_LEFTDOWN | MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
+    }
+
+    internal static void PressMouseButton()
+    {
+        mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
+    }
+
+    internal static void ReleaseMouseButton()
+    {
+        mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
+    }
+
+    [DllImport("user32.dll")]
+    static extern bool SetCursorPos(int X, int Y);
+
+    internal static void MoveCursorToPoint(int x, int y)
+    {
+        SetCursorPos(x, y);
+    }
+
+    internal static void MoveCursorToPointScreenSpace(int x, int y)
+    {
+        SetCursorPos((int)(x * 0.8), (int)(y * 0.8));
     }
 }
