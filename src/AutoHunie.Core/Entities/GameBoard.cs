@@ -1,4 +1,5 @@
 using System.Drawing;
+using System.Text;
 
 namespace AutoHunie.Core.Entities;
 
@@ -63,7 +64,9 @@ public class GameBoard
             throw new InvalidOperationException($"Cannot set a column of height {Height} to height of {tokens.Length}");
 
         for (var i = 0; i < Height; i++)
-            _tokens[y, i] = new Token(tokens[i].Type);
+        {
+            _tokens[y, i] = tokens[i] is null ? null! : new Token(tokens[i].Type);
+        }
     }
 
     public Token GetToken(int x, int y)
@@ -173,8 +176,23 @@ public class GameBoard
             {
                 _tokens[x, y].Draw();
             }
-            Console.WriteLine();
+            //Console.WriteLine();
         }
+    }
+
+    public override string ToString()
+    {
+        var sb = new StringBuilder();
+        for (var y = 0; y < Height; y++)
+        {
+            for (var x = 0; x < Width; x++)
+            {
+                sb.Append(_tokens[x, y].ToString());
+            }
+            sb.Append('\n');
+        }
+
+        return sb.ToString();
     }
 
     public bool IsInBounds(Point p) 
@@ -195,16 +213,36 @@ public class GameBoard
 
     public int SimulateForward()
     {
+        int score = 0;
+
         var matches = Where((token, x, y) =>
         {
             return
-                (GetTokenSafe(x + 1, y) == token && GetTokenSafe(x - 1, y) == token) ||
-                (GetTokenSafe(x, y + 1) == token && GetTokenSafe(x, y - 1) == token);
+                token != new Token(TokenType.Unknown) &&
+                ((GetTokenSafe(x + 1, y) == token && GetTokenSafe(x - 1, y) == token) ||
+                (GetTokenSafe(x, y + 1) == token && GetTokenSafe(x, y - 1) == token) ||
+                (GetTokenSafe(x - 1, y) == token && GetTokenSafe(x - 2, y) == token) || //two on left
+                (GetTokenSafe(x + 1, y) == token && GetTokenSafe(x + 2, y) == token) || //two on right
+                (GetTokenSafe(x, y - 1) == token && GetTokenSafe(x, y - 2) == token) || //two above
+                (GetTokenSafe(x, y + 1) == token && GetTokenSafe(x, y + 2) == token)); //two bellow
         });
 
-        foreach (var match in matches)
+        foreach (var (pos, token) in matches)
         {
-            _tokens[match.Item1.X, match.Item1.Y] = null!;
+            // add to score
+            // TODO: different points for different types (+ settings for these)
+            if (token == new Token(TokenType.BrokenHeart))
+                score -= 5;
+            else if (token == new Token(TokenType.Stamina))
+                score += 2;
+            else if (token == new Token(TokenType.Romance))
+                score += 2;
+            else if (token == new Token(TokenType.Unknown))
+                throw new InvalidOperationException("We're popping unknowns?");
+            else
+                score += 5;
+
+            _tokens[pos.X, pos.Y] = null!;
         }
 
         for (var i = 0; i < Width; i++)
@@ -217,11 +255,18 @@ public class GameBoard
                 for (var j = 0; j < nullCount; j++)
                 {
                     var last = column.ToList().LastIndexOf(null!);
+                    SlideToken(i, last, SlideDirection.Vertical, last, 0);
                 }
             }
         }
 
-        return 0;
+        var nulls = Where((token, x, y) => token is null);
+        foreach (var (pos, token) in nulls)
+        {
+            SetToken(pos.X, pos.Y, new Token(TokenType.Unknown));
+        }
+
+        return score;
     }
 
     public static bool operator ==(GameBoard obj1, GameBoard obj2) => obj1 is not null && obj1.Equals(obj2);
@@ -264,6 +309,13 @@ public class GameBoard
 
     public GameBoard ApplyMove(GameMove move)
     {
+        var direction = move.FromX == move.ToX ? SlideDirection.Vertical : SlideDirection.Horizontal;
+
+        var source = direction == SlideDirection.Horizontal ? move.FromX : move.FromY;
+        var destionation = direction == SlideDirection.Horizontal ? move.ToX : move.ToY;
+
+        SlideToken(move.FromX, move.FromY, direction, source, destionation);
+
         return this;
     }
 }

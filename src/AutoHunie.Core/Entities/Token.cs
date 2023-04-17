@@ -15,53 +15,68 @@ public class Token
 
     public TokenType Type { get; }
 
-    public void Draw()
+    public string Draw()
     {
         switch (Type)
         {
             case TokenType.Sexuality:
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.Write("[SEX]");
-                break;
+                //Console.Write("[SEX]");
+                Console.ResetColor();
+                return "[SEX]";
             case TokenType.Romance:
                 Console.ForegroundColor = ConsoleColor.DarkYellow;
-                Console.Write("[RMC]");
-                break;
+                //Console.Write("[RMC]");
+                Console.ResetColor();
+                return "[RMC]";
             case TokenType.Joy:
                 Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.Write("[JOY]");
-                break;
+                //Console.Write("[JOY]");
+                Console.ResetColor();
+                return "[JOY]";
             case TokenType.Flirtation:
                 Console.ForegroundColor = ConsoleColor.Green;
-                Console.Write("[FLR]");
-                break;
+                //Console.Write("[FLR]");
+                Console.ResetColor();
+                return "[FLR]";
             case TokenType.Sentiment:
                 Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.Write("[SNT]");
-                break;
+                //Console.Write("[SNT]");
+                Console.ResetColor();
+                return "[SNT]";
             case TokenType.Talent:
                 Console.ForegroundColor = ConsoleColor.Blue;
-                Console.Write("[TLT]");
-                break;
+                //Console.Write("[TLT]");
+                Console.ResetColor();
+                return "[TLT]";
             case TokenType.BrokenHeart:
                 Console.ForegroundColor = ConsoleColor.DarkMagenta;
-                Console.Write("[BHT]");
-                break;
+                //Console.Write("[BHT]");
+                Console.ResetColor();
+                return "[BHT]";
             case TokenType.Passion:
                 Console.ForegroundColor = ConsoleColor.Magenta;
-                Console.Write("[PSN]");
-                break;
+                //Console.Write("[PSN]");
+                Console.ResetColor();
+                return "[PSN]";
             case TokenType.Stamina:
                 Console.ForegroundColor = ConsoleColor.Gray;
-                Console.Write("[STM]");
-                break;
+                //Console.Write("[STM]");
+                Console.ResetColor();
+                return "[STM]";
             case TokenType.Unknown:
                 Console.ForegroundColor = ConsoleColor.DarkGray;
-                Console.Write("[UNK]");
-                break;
+                //Console.Write("[UNK]");
+                Console.ResetColor();
+                return "[UNK]";
         }
 
-        Console.ResetColor();
+        return "?";
+    }
+
+    public override string ToString()
+    {
+        return Draw();
     }
 
     public static Color GetColorOf(TokenType type) => type switch

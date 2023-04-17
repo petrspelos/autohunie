@@ -583,7 +583,7 @@ playNextMove.Click += async (sender, args) =>
     {
         while (continuePlayingCheck.Checked)
         {
-            Console.WriteLine($"[{DateTime.Now.ToLongTimeString()}] Aight! Let's see what we've got here...");
+            //Console.WriteLine($"[{DateTime.Now.ToLongTimeString()}] Aight! Let's see what we've got here...");
             // > TAKE SCREENSHOT OF WHERE WE THINK THE BOARD IS
             var gameBoardRect = new Rectangle(540, 155, 775, 603);
             Bitmap bmp = new Bitmap(gameBoardRect.Width, gameBoardRect.Height, PixelFormat.Format32bppArgb);
@@ -610,11 +610,11 @@ playNextMove.Click += async (sender, args) =>
                 }
             }
 
-            //Console.WriteLine("RECOGNIZED GAME BOARD:");
+            ////Console.WriteLine("RECOGNIZED GAME BOARD:");
             //board.Draw();
 
             var solver = new GameSolver(board);
-            var move = solver.GetNextBestMove(bmp);
+            var move = solver.GetNextBestMove();
 
             WindowsApi.MoveCursorToPointScreenSpace(move.FromScreenX + gameBoardRect.Left, move.FromScreenY + gameBoardRect.Top);
             WindowsApi.DoMouseClick();
@@ -634,7 +634,7 @@ playNextMove.Click += async (sender, args) =>
     }
     catch (Exception e)
     {
-        Console.WriteLine($"Stopped Due to an Exception: {e}");
+        //Console.WriteLine($"Stopped Due to an Exception: {e}");
         throw;
     }
 };
@@ -652,9 +652,9 @@ Application.Run(form);
 
 
 // var pixel = bmp.GetPixel(10, 10);
-// Console.WriteLine($"R:{pixel.R} G:{pixel.G} B:{pixel.B}");
+// //Console.WriteLine($"R:{pixel.R} G:{pixel.G} B:{pixel.B}");
 
 
 
-//Console.WriteLine("Ctrl + C to EXIT");
+////Console.WriteLine("Ctrl + C to EXIT");
 //await Task.Delay(-1);

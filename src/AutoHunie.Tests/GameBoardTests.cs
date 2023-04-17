@@ -91,6 +91,29 @@ public class GameBoardTests
 
         Assert.Equal(new Token(TokenType.Romance), column[0]);
         Assert.Equal(new Token(TokenType.Joy), column[1]);
+    }
 
+    [Fact]
+    public void GameBoardSimulation_ShouldPopTokens()
+    {
+        var gameBoard = new GameBoard(6, 4);
+
+        gameBoard.SetRow(0, new Token[] { new(TokenType.Stamina), new(TokenType.Joy), new(TokenType.BrokenHeart), new(TokenType.Sentiment), new(TokenType.Passion), new(TokenType.Flirtation) });
+        gameBoard.SetRow(1, new Token[] { new(TokenType.Talent), new(TokenType.Passion), new(TokenType.Romance), new(TokenType.Sexuality), new(TokenType.Flirtation), new(TokenType.Flirtation) });
+        gameBoard.SetRow(2, new Token[] { new(TokenType.Romance), new(TokenType.Romance), new(TokenType.Romance), new(TokenType.Talent), new(TokenType.Sexuality), new(TokenType.Flirtation) });
+        gameBoard.SetRow(3, new Token[] { new(TokenType.Joy), new(TokenType.Stamina), new(TokenType.Romance), new(TokenType.Passion), new(TokenType.Sentiment), new(TokenType.Talent) });
+
+        var expectedBoard = new GameBoard(6, 4);
+
+        var beforeString = gameBoard.ToString();
+
+        expectedBoard.SetRow(0, new Token[] { new(TokenType.Unknown), new(TokenType.Unknown), new(TokenType.Unknown), new(TokenType.Sentiment), new(TokenType.Passion), new(TokenType.Unknown) });
+        expectedBoard.SetRow(1, new Token[] { new(TokenType.Stamina), new(TokenType.Joy), new(TokenType.Unknown), new(TokenType.Sexuality), new(TokenType.Flirtation), new(TokenType.Unknown) });
+        expectedBoard.SetRow(2, new Token[] { new(TokenType.Talent), new(TokenType.Passion), new(TokenType.Unknown), new(TokenType.Talent), new(TokenType.Sexuality), new(TokenType.Unknown) });
+        expectedBoard.SetRow(3, new Token[] { new(TokenType.Joy), new(TokenType.Stamina), new(TokenType.BrokenHeart), new(TokenType.Passion), new(TokenType.Sentiment), new(TokenType.Talent) });
+
+        var score = gameBoard.SimulateForward();
+
+        Assert.Equal(expectedBoard, gameBoard);
     }
 }
