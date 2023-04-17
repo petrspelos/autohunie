@@ -16,75 +16,7 @@ public class GameSolver
     {
         var moves = GetValidMoves(_board.Clone());
 
-        return moves.MaxBy(m => GetScoreOfDepth(m));
-
-        // var boardsToCheck = new Queue<GameBoard>();
-        // var boardsList = new List<GameBoard>();
-        // var movesList = new List<GameMove>();
-        // var graph = new List<GraphNode>();
-
-        // boardsToCheck.Enqueue(_board.Clone());
-
-        // while (boardsToCheck.Count != 0)
-        // {
-        //     Console.WriteLine($"boardsToCheck: {boardsToCheck.Count}");
-        //     var board = boardsToCheck.Dequeue();
-
-        //     var boardId = boardsList.Count;
-        //     if (boardsList.Contains(board))
-        //     {
-        //         boardId = boardsList.IndexOf(board);
-        //     }
-        //     else
-        //     {
-        //         boardsList.Add(board);
-        //     }
-
-        //     var moves = GetValidMoves(board);
-
-        //     foreach (var move in moves)
-        //     {
-        //         var moveId = movesList.Count;
-        //         movesList.Add(move);
-
-        //         var (newBoard, score) = SimulateBoard(board, move);
-
-        //         if (!boardsList.Contains(newBoard))
-        //         {
-        //             var newBoardId = boardsList.Count;
-        //             boardsList.Add(newBoard);
-
-        //             boardsToCheck.Enqueue(newBoard.Clone());
-
-        //             if (boardId == newBoardId)
-        //                 throw new InvalidOperationException("No cyclical graphs allowed");
-
-        //             graph.Add(new GraphNode
-        //             {
-        //                 ParentId = boardId,
-        //                 ChildId = newBoardId,
-        //                 MoveId = moveId,
-        //                 Score = score
-        //             });
-        //         }
-        //         else
-        //         {
-        //             var index = boardsList.IndexOf(newBoard);
-
-        //             graph.Add(new GraphNode
-        //             {
-        //                 ParentId = boardId,
-        //                 ChildId = index,
-        //                 MoveId = moveId,
-        //                 Score = score
-        //             });
-        //         }
-        //     }
-        // }
-
-        // var bestNode = GetBestNode(graph);
-
-        // return movesList[bestNode.MoveId];
+        return moves.MaxBy(m => GetScoreOfDepth(m)) ?? throw new InvalidOperationException("Max score couldn't be determined");
     }
 
     private int GetScoreOfDepth(GameMove move)
@@ -217,7 +149,6 @@ public class GameSolver
     {
         var moves = new List<GameMove>();
 
-        // explore horizontal slides
         for (var i = 0; i < board.Width; i++)
         {
             if (i == p.X)
@@ -228,12 +159,6 @@ public class GameSolver
             
             if (futureBoard.HasMatch())
             {
-
-                // found a match yo!
-                //Console.WriteLine("🎉🎉🎉🎉 I FUCKING CANNOT BELIEVE IT RIGHT NOW... SHITS LIKE MATCHING AND STUFF 🎉🎉🎉🎉\nSee for yourself, human:");
-                //Console.WriteLine($"I moved {p.X}x{p.Y} horizontally from {p.X} to index {i}");
-                //futureBoard.Draw();
-                //Console.WriteLine("====");
                 moves.Add(new(p.X, p.Y, i, p.Y));
             }
 
@@ -244,11 +169,6 @@ public class GameSolver
             if (futureBoard.HasMatch())
             {
 
-                // found a match yo!
-                //Console.WriteLine("🎉🎉🎉🎉 I FUCKING CANNOT BELIEVE IT RIGHT NOW... SHITS LIKE MATCHING AND STUFF 🎉🎉🎉🎉\nSee for yourself, human:");
-                //Console.WriteLine($"I moved {p.X}x{p.Y} horizontally from {p.X} to index {i}");
-                //futureBoard.Draw();
-                //Console.WriteLine("====");
                 moves.Add(new(i, p.Y, p.X, p.Y));
             }
         }
@@ -264,11 +184,6 @@ public class GameSolver
             
             if (futureBoard.HasMatch())
             {
-                // found a match yo!
-                //Console.WriteLine("🎉🎉🎉🎉 I FUCKING CANNOT BELIEVE IT RIGHT NOW... SHITS LIKE MATCHING AND STUFF 🎉🎉🎉🎉\nSee for yourself, human:");
-                //Console.WriteLine($"I moved {p.X}x{p.Y} vertically from {p.Y} to index {i}");
-                //futureBoard.Draw();
-                //Console.WriteLine("====");
                 moves.Add(new(p.X, p.Y, p.X, i));
             }
 
@@ -277,11 +192,6 @@ public class GameSolver
 
             if (futureBoard.HasMatch())
             {
-                // found a match yo!
-                //Console.WriteLine("🎉🎉🎉🎉 I FUCKING CANNOT BELIEVE IT RIGHT NOW... SHITS LIKE MATCHING AND STUFF 🎉🎉🎉🎉\nSee for yourself, human:");
-                //Console.WriteLine($"I moved {p.X}x{p.Y} vertically from {p.Y} to index {i}");
-                //futureBoard.Draw();
-                //Console.WriteLine("====");
                 moves.Add(new(p.X, i, p.X, p.Y));
             }
         }

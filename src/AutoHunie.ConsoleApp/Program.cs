@@ -7,75 +7,9 @@ using System.Drawing.Imaging;
 Console.Clear();
 Logo.Draw();
 
-
-
-
-
 var tileSize = 86;
 
-
-
-//var solver = new GameSolver(board);
-//var moveImages = solver.GetNextBestMove(bmp);
-
 var halfTile = tileSize / 2;
-//// draw move
-//if (move.FromX == move.ToX)
-//{
-//    if (move.ToY < move.FromY)
-//    {
-//        var temp = move.ToY;
-//        move.ToY = move.FromY;
-//        move.FromY = temp;
-//    }
-
-//    // moving up or down
-//    var stableX = move.FromX * tileSize + halfTile;
-//    for (var i = move.FromY * tileSize + halfTile; i < move.ToY * tileSize + halfTile; i++)
-//    {
-//        bmp.SetPixel(stableX, i, Color.Black);
-//    }
-
-//    // var end = move.ToY * tileSize + halfTile;
-//    // for (var i = 1; i < 11; i++)
-//    // {
-//    //     bmp.SetPixel(stableX, end - i, Color.Black);
-//    //     bmp.SetPixel(stableX + i, end - i, Color.Black);
-//    //     bmp.SetPixel(stableX - i, end - i, Color.Black);
-//    // }
-//}
-//else
-//{
-//    if (move.ToX < move.FromX)
-//    {
-//        var temp = move.ToX;
-//        move.ToX = move.FromX;
-//        move.FromX = temp;
-//    }
-
-//    // moving horizontally
-//    var stableY = move.FromY * tileSize + halfTile;
-//    for (var i = move.FromX * tileSize + halfTile; i < move.ToX * tileSize + halfTile; i++)
-//    {
-//        bmp.SetPixel(i, stableY, Color.Black);
-//    }
-
-//    // var end = move.ToX * tileSize + halfTile;
-//    // for (var i = 1; i < 11; i++)
-//    // {
-//    //     bmp.SetPixel(end - i, stableY, Color.Black);
-//    //     bmp.SetPixel(end - i, stableY + i, Color.Black);
-//    //     bmp.SetPixel(end - i, stableY - i, Color.Black);
-//    // }
-//}
-
-
-//tileBmp.Save($"single-token.png", ImageFormat.Png);
-//bmp.Save("full-board.png", ImageFormat.Png);
-
-//bmp.DrawStraightLine(10, 10, 100, 10, Color.Aqua, 5);
-//bmp.DrawStraightLine(10, 100, 10, 500, Color.Bisque, 2);
-//bmp.DrawStraightLine(10, 10, 10, 300, Color.Aqua, 10);
 
 if (Screen.PrimaryScreen is null)
     throw new InvalidOperationException("Could not determine the size of primary screen, because it was null. Is there a screen at all?");
@@ -279,13 +213,10 @@ var form = new Form
     TopMost = true
 };
 
-
-
 var tabControl = new TabControl
 {
     Size = new Size(336, 376)
 };
-
 
 foreach (var girlInfo in girlInfos)
 {
@@ -429,18 +360,6 @@ foreach (var girlInfo in girlInfos)
     tabControl.TabPages[tabIndex].Controls.Add(baggageBox);
 }
 
-
-//new Font("Exo Black", 9F, FontStyle.Regular, GraphicsUnit.Point);
-
-//PictureBox pictureBox = new PictureBox();
-//pictureBox.Image = bmp;
-//pictureBox.Width = 563;
-//pictureBox.Height = 415;
-//pictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
-
-
-
-//form.Controls.Add(pictureBox);
 form.Controls.Add(tabControl);
 
 var settingsPanel = new Panel
@@ -478,8 +397,6 @@ var moveGameGroupBox = new GroupBox
 
 var windowWidth = 1536;
 var windowHeight = 864;
-//var windowWidth = Screen.PrimaryScreen.Bounds.Width;
-//var windowHeight = Screen.PrimaryScreen.Bounds.Height;
 
 var xResolutionSelect = new NumericUpDown
 {
@@ -583,14 +500,11 @@ playNextMove.Click += async (sender, args) =>
     {
         while (continuePlayingCheck.Checked)
         {
-            //Console.WriteLine($"[{DateTime.Now.ToLongTimeString()}] Aight! Let's see what we've got here...");
-            // > TAKE SCREENSHOT OF WHERE WE THINK THE BOARD IS
             var gameBoardRect = new Rectangle(540, 155, 775, 603);
             Bitmap bmp = new Bitmap(gameBoardRect.Width, gameBoardRect.Height, PixelFormat.Format32bppArgb);
             Graphics g = Graphics.FromImage(bmp);
             g.CopyFromScreen(gameBoardRect.Left, gameBoardRect.Top, 0, 0, bmp.Size, CopyPixelOperation.SourceCopy);
 
-            // > RECREATE THE TOKENS FOLDER
             if (Directory.Exists("token"))
                 Directory.Delete("tokens", true);
 
@@ -610,9 +524,6 @@ playNextMove.Click += async (sender, args) =>
                 }
             }
 
-            ////Console.WriteLine("RECOGNIZED GAME BOARD:");
-            //board.Draw();
-
             var solver = new GameSolver(board);
             var move = solver.GetNextBestMove();
 
@@ -624,7 +535,6 @@ playNextMove.Click += async (sender, args) =>
             WindowsApi.MoveCursorToPointScreenSpace(move.ToScreenX + gameBoardRect.Left, move.ToScreenY + gameBoardRect.Top);
             await Task.Delay(TimeSpan.FromSeconds(0.2));
             WindowsApi.ReleaseMouseButton();
-            //bmp.Save("board.png", ImageFormat.Png);
             await Task.Delay(TimeSpan.FromSeconds(0.5));
             WindowsApi.MoveCursorToPointScreenSpace(gameBoardRect.Left - 10, gameBoardRect.Top - 10);
             WindowsApi.DoMouseClick();
@@ -634,11 +544,9 @@ playNextMove.Click += async (sender, args) =>
     }
     catch (Exception e)
     {
-        //Console.WriteLine($"Stopped Due to an Exception: {e}");
-        throw;
+        Console.WriteLine(e);
     }
 };
-
 
 settingsPanel.Controls.Add(moveGameGroupBox);
 settingsPanel.Controls.Add(testMouseButton);
@@ -648,13 +556,3 @@ settingsPanel.Controls.Add(continuePlayingCheck);
 form.Controls.Add(settingsPanel);
 
 Application.Run(form);
-
-
-
-// var pixel = bmp.GetPixel(10, 10);
-// //Console.WriteLine($"R:{pixel.R} G:{pixel.G} B:{pixel.B}");
-
-
-
-////Console.WriteLine("Ctrl + C to EXIT");
-//await Task.Delay(-1);
