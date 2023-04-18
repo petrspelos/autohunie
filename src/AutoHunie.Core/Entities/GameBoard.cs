@@ -176,7 +176,6 @@ public class GameBoard
             {
                 _tokens[x, y].Draw();
             }
-            //Console.WriteLine();
         }
     }
 
