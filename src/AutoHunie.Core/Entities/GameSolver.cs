@@ -30,47 +30,6 @@ public class GameSolver
         return score + additionalScore;
     }
 
-    private GraphNode GetBestNode(List<GraphNode> graph)
-    {
-        var terminals = graph.Where(node => 
-        {
-            if (graph.Any(n => n.ParentId == node.ChildId))
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-
-        }).ToList();
-
-        var bestScore = int.MinValue;
-        GraphNode bestNode = null!;
-
-        foreach (var node in terminals)
-        {
-            var parentId = node.ParentId;
-            var score = node.Score;
-            GraphNode thisNode = null!;
-
-            while (parentId != 0)
-            {
-                var parent = graph.First(n => node.ParentId == n.ChildId);
-                parentId = parent.ChildId;
-                score += parent.Score;
-                thisNode = parent;
-            }
-
-            if (score > bestScore)
-            {
-                bestScore = score;
-                bestNode = thisNode;
-            }
-        }
-
-        return bestNode;
-    }
 
     private Tuple<GameBoard, int> SimulateBoard(GameBoard boardToCheck, GameMove vm)
     {
@@ -198,12 +157,4 @@ public class GameSolver
 
         return moves;
     }
-}
-
-internal class GraphNode
-{
-    internal int ParentId { get; set; }
-    internal int Score { get; set; }
-    internal int ChildId { get; set; }
-    internal int MoveId { get; set; }
 }
