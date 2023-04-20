@@ -3,7 +3,7 @@ using System.Text;
 
 namespace AutoHunie.Core.Entities;
 
-public class GameBoard
+public record GameBoard
 {
     public const int NumberOfColumns = 9;
     public const int NumberOfRows = 7;
@@ -15,18 +15,101 @@ public class GameBoard
         _tokens = new Token[numOfColumns, numOfRows];
     }
 
-    public int Width => _tokens.GetLength(0);
+    public int Columns => _tokens.GetLength(0);
 
-    public int Height => _tokens.GetLength(1);
+    public int Rows => _tokens.GetLength(1);
+
+    public List<(int x, int y, int newX, int newY)> FindAllPossibleMoves()
+    {
+        if (HasMatch())
+            throw new InvalidOperationException("Cannot search for moves in a board with matches");
+
+        var possibleMoves = new List<(int x, int y, int newX, int newY)>();
+
+        for (int x = 0; x < Columns; x++)
+        {
+            for (int y = 0; y < Rows; y++)
+            {
+                for (int dist = 1; dist < Columns; dist++) // Check horizontal moves with larger distances
+                {
+                    if (x + dist < Columns)
+                    {
+                        SlideToken(x, y, x + dist, y);
+                        if (HasMatch())
+                        {
+                            possibleMoves.Add((x, y, x + dist, y));
+                        }
+                        SlideToken(x + dist, y, x, y); // Move token back to original position
+                    }
+                }
+
+                for (int dist = 1; dist < Rows; dist++) // Check vertical moves with larger distances
+                {
+                    if (y + dist < Rows)
+                    {
+                        SlideToken(x, y, x, y + dist);
+                        if (HasMatch())
+                        {
+                            possibleMoves.Add((x, y, x, y + dist));
+                        }
+                        SlideToken(x, y + dist, x, y); // Move token back to original position
+                    }
+                }
+            }
+        }
+
+        return possibleMoves;
+    }
+
+    public (int x, int y, int newX, int newY) FindBestMoveConsideringFuture(int searchDepth)
+    {
+        return DepthLimitedSearch(this, searchDepth).bestMove;
+    }
+
+    private (int score, (int x, int y, int newX, int newY) bestMove) DepthLimitedSearch(GameBoard board, int depth)
+    {
+        if (depth == 0)
+        {
+            return (0, (-1, -1, -1, -1));
+        }
+
+        int bestScore = -1;
+        (int x, int y, int newX, int newY) bestMove = (-1, -1, -1, -1);
+
+        var possibleMoves = board.FindAllPossibleMoves();
+
+        foreach (var move in possibleMoves)
+        {
+            GameBoard testBoard = board with {};
+            testBoard.SlideToken(move.x, move.y, move.newX, move.newY);
+            
+            int score = 0;
+            while (testBoard.HasMatch())
+            {
+                score += testBoard.SimulateForward();
+            }
+
+            var futureResult = DepthLimitedSearch(testBoard, depth - 1);
+            score += futureResult.score;
+
+            if (score > bestScore)
+            {
+                bestScore = score;
+                bestMove = move;
+            }
+        }
+
+        return (bestScore, bestMove);
+    }
 
     public Token[] GetRow(int x)
     {
-        if (x < 0 || x >= Height)
-            throw new InvalidOperationException($"The row {x} is outside of the game board bounds ({Width}x{Height})");
+        if (x < 0 || x >= Rows)
+            throw new InvalidOperationException($"The row {x} is outside of the game board bounds ({Columns}x{Rows})");
 
-        var result = new Token[Width];
+        var result = new Token[Columns];
 
-        for (var i = 0; i < Width; i++)
+        for (var i = 0; i < Columns; i++)
         {
             result[i] = _tokens[i, x];
         }
@@ -36,21 +119,21 @@ public class GameBoard
 
     public void SetRow(int x, Token[] tokens)
     {
-        if (tokens.Length != Width)
-            throw new InvalidOperationException($"Cannot set a row of width {Width} to width of {tokens.Length}");
+        if (tokens.Length != Columns)
+            throw new InvalidOperationException($"Cannot set a row of width {Columns} to width of {tokens.Length}");
 
-        for (var i = 0; i < Width; i++)
+        for (var i = 0; i < Columns; i++)
             _tokens[i, x] = new Token(tokens[i].Type);
     }
 
     public Token[] GetColumn(int y)
     {
-        if (y < 0 || y >= Width)
-            throw new InvalidOperationException($"The column {y} is outside of the game board bounds ({Width}x{Height})");
+        if (y < 0 || y >= Columns)
+            throw new InvalidOperationException($"The column {y} is outside of the game board bounds ({Columns}x{Rows})");
 
-        var result = new Token[Height];
+        var result = new Token[Rows];
 
-        for (var i = 0; i < Height; i++)
+        for (var i = 0; i < Rows; i++)
         {
             result[i] = _tokens[y, i];
         }
@@ -60,10 +143,10 @@ public class GameBoard
 
     public void SetColumn(int y, Token[] tokens)
     {
-        if (tokens.Length != Height)
-            throw new InvalidOperationException($"Cannot set a column of height {Height} to height of {tokens.Length}");
+        if (tokens.Length != Rows)
+            throw new InvalidOperationException($"Cannot set a column of height {Rows} to height of {tokens.Length}");
 
-        for (var i = 0; i < Height; i++)
+        for (var i = 0; i < Rows; i++)
         {
             _tokens[y, i] = tokens[i] is null ? null! : new Token(tokens[i].Type);
         }
@@ -71,23 +154,23 @@ public class GameBoard
 
     public Token GetToken(int x, int y)
     {
-        if (x < 0 || x >= Width || y < 0 || y >= Height)
-            throw new InvalidOperationException($"The position ({x}x{y}) is outside of the game board bounds ({Width}x{Height})");
+        if (x < 0 || x >= Columns || y < 0 || y >= Rows)
+            throw new InvalidOperationException($"The position ({x}x{y}) is outside of the game board bounds ({Columns}x{Rows})");
 
         return _tokens[x, y];
     }
 
     public void SetToken(int x, int y, Token token)
     {
-        if (x < 0 || x >= Width || y < 0 || y >= Height)
-            throw new InvalidOperationException($"The position ({x}x{y}) is outside of the game board bounds ({Width}x{Height})");
+        if (x < 0 || x >= Columns || y < 0 || y >= Rows)
+            throw new InvalidOperationException($"The position ({x}x{y}) is outside of the game board bounds ({Columns}x{Rows})");
 
         _tokens[x, y] = token;
     }
 
     public Token GetTokenSafe(int x, int y)
     {
-        if (x < 0 || x >= Width || y < 0 || y >= Height)
+        if (x < 0 || x >= Columns || y < 0 || y >= Rows)
             return new Token(TokenType.Unknown);
 
         return _tokens[x, y];
@@ -97,9 +180,9 @@ public class GameBoard
     {
         var result = new List<Tuple<Point, Token>>();
 
-        for (var x = 0; x < Width; x++)
+        for (var x = 0; x < Columns; x++)
         {
-            for (var y = 0; y < Height; y++)
+            for (var y = 0; y < Rows; y++)
             {
                 if (predicate?.Invoke(_tokens[x, y], x, y) ?? false)
                     result.Add(new(new Point(x, y), _tokens[x, y]));
@@ -109,19 +192,17 @@ public class GameBoard
         return result;
     }
 
-    public GameBoard Clone()
+    public void SlideToken(int x, int y, int newX, int newY)
     {
-        var clone = new GameBoard(Width, Height);
+        if (x != newX && y != newY)
+            throw new InvalidOperationException("Diagonal slides are not allowed.");
 
-        for (var x = 0; x < Width; x++)
-        {
-            for (var y = 0; y < Height; y++)
-            {
-                clone.SetToken(x, y, _tokens[x, y]);
-            }
-        }
+        var direction = x != newX ? SlideDirection.Horizontal : SlideDirection.Vertical;
 
-        return clone;
+        var source = x != newX ? x : y;
+        var destionation = x != newX ? newX : newY;
+
+        SlideToken(x, y, direction, source, destionation);
     }
 
     public void SlideToken(int x, int y, SlideDirection direction, int source, int destination)
@@ -170,9 +251,9 @@ public class GameBoard
 
     public void Draw()
     {
-        for (var y = 0; y < Height; y++)
+        for (var y = 0; y < Rows; y++)
         {
-            for (var x = 0; x < Width; x++)
+            for (var x = 0; x < Columns; x++)
             {
                 _tokens[x, y].Draw();
             }
@@ -182,9 +263,9 @@ public class GameBoard
     public override string ToString()
     {
         var sb = new StringBuilder();
-        for (var y = 0; y < Height; y++)
+        for (var y = 0; y < Rows; y++)
         {
-            for (var x = 0; x < Width; x++)
+            for (var x = 0; x < Columns; x++)
             {
                 sb.Append(_tokens[x, y].ToString());
             }
@@ -194,19 +275,22 @@ public class GameBoard
         return sb.ToString();
     }
 
-    public bool IsInBounds(Point p) 
+    public bool IsInBounds(Point p)
         => p.X >= 0 &&
-            p.X < Width &&
+            p.X < Columns &&
             p.Y >= 0 &&
-            p.Y < Height;
+            p.Y < Rows;
 
     public bool HasMatch()
     {
         return Where((token, x, y) =>
         {
-            return 
-                (GetTokenSafe(x + 1, y) == token && GetTokenSafe(x - 1, y) == token) ||
-                (GetTokenSafe(x, y + 1) == token && GetTokenSafe(x, y - 1) == token);
+            return
+                (token != new Token(TokenType.Unknown)) &&
+                (
+                    (GetTokenSafe(x + 1, y) == token && GetTokenSafe(x - 1, y) == token) ||
+                    (GetTokenSafe(x, y + 1) == token && GetTokenSafe(x, y - 1) == token)
+                );
         }).Any();
     }
 
@@ -244,7 +328,7 @@ public class GameBoard
             _tokens[pos.X, pos.Y] = null!;
         }
 
-        for (var i = 0; i < Width; i++)
+        for (var i = 0; i < Columns; i++)
         {
             var column = GetColumn(i);
             var nullCount = column.Count(t => t is null);
@@ -268,38 +352,15 @@ public class GameBoard
         return score;
     }
 
-    public static bool operator ==(GameBoard obj1, GameBoard obj2) => obj1 is not null && obj1.Equals(obj2);
-
-    public static bool operator !=(GameBoard obj1, GameBoard obj2) => obj1 is null || !obj1.Equals(obj2);
-
-    public override bool Equals(object? obj) => Equals(obj as GameBoard);
-
-    public bool Equals(GameBoard? other)
-    {
-        if (other is null || other.Width != this.Width || other.Height != this.Height)
-            return false;
-
-        for (var x = 0; x < Width; x++)
-        {
-            for (var y = 0; y < Height; y++)
-            {
-                if (this._tokens[x, y] != other.GetToken(x, y))
-                    return false;
-            }
-        }
-
-        return true;
-    }
-
     public override int GetHashCode()
     {
-        int hash = HashCode.Combine(Width, Height);
+        int hash = HashCode.Combine(Columns, Rows);
 
-        for (var x = 0; x < Width; x++)
+        for (var x = 0; x < Columns; x++)
         {
-            for (var y = 0; y < Height; y++)
+            for (var y = 0; y < Rows; y++)
             {
-                hash = HashCode.Combine(hash, this._tokens[x, y]);
+                hash = HashCode.Combine(hash, _tokens[x, y]);
             }
         }
 
