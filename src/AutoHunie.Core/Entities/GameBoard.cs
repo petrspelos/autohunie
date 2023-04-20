@@ -80,17 +80,21 @@ public record GameBoard
 
         foreach (var move in possibleMoves)
         {
-            GameBoard testBoard = board with {};
+            GameBoard testBoard = board with { };
             testBoard.SlideToken(move.x, move.y, move.newX, move.newY);
-            
+
             int score = 0;
             while (testBoard.HasMatch())
             {
                 score += testBoard.SimulateForward();
             }
 
-            var futureResult = DepthLimitedSearch(testBoard, depth - 1);
-            score += futureResult.score;
+            // Only search deeper if the current depth is greater than 1
+            if (depth > 1)
+            {
+                var futureResult = DepthLimitedSearch(testBoard, depth - 1);
+                score += futureResult.score;
+            }
 
             if (score > bestScore)
             {
