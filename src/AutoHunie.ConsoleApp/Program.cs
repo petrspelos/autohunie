@@ -526,7 +526,7 @@ playNextMove.Click += async (sender, args) =>
 
             // var solver = new GameSolver(board);
             // var move = solver.GetNextBestMove();
-            var bestMove = board.FindBestMoveConsideringFuture(3);
+            var bestMove = board.FindBestMoveConsideringFuture(10);
             var move = new GameMove(bestMove.x, bestMove.y, bestMove.newX, bestMove.newY);
 
             WindowsApi.MoveCursorToPointScreenSpace(move.FromScreenX + gameBoardRect.Left, move.FromScreenY + gameBoardRect.Top);

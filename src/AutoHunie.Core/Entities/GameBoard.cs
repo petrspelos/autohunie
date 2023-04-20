@@ -315,7 +315,7 @@ public record GameBoard
             // add to score
             // TODO: different points for different types (+ settings for these)
             if (token == new Token(TokenType.BrokenHeart))
-                score -= 5;
+                score -= 250;
             else if (token == new Token(TokenType.Stamina))
                 score += 2;
             else if (token == new Token(TokenType.Romance))
@@ -323,10 +323,17 @@ public record GameBoard
             else if (token == new Token(TokenType.Unknown))
                 throw new InvalidOperationException("We're popping unknowns?");
             else
-                score += 5;
+                score += 10;
 
             _tokens[pos.X, pos.Y] = null!;
         }
+
+        if (matches.Count() > 3)
+        {
+            score += matches.Count() * 100;
+        }
+
+        System.Console.WriteLine($"score: {score} - matches: {matches.Count()}");
 
         for (var i = 0; i < Columns; i++)
         {
