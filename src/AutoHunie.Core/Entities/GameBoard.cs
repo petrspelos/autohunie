@@ -63,14 +63,14 @@ public record GameBoard
 
     public (int x, int y, int newX, int newY) FindBestMoveConsideringFuture(int searchDepth)
     {
-        return DepthLimitedSearch(this, searchDepth).bestMove;
+        return DepthLimitedSearch(this, searchDepth, (-1, -1, -1, -1)).bestMove;
     }
 
-    private (int score, (int x, int y, int newX, int newY) bestMove) DepthLimitedSearch(GameBoard board, int depth)
+    private (int score, (int x, int y, int newX, int newY) bestMove) DepthLimitedSearch(GameBoard board, int depth, (int x, int y, int newX, int newY) currentMove)
     {
         if (depth == 0)
         {
-            return (0, (-1, -1, -1, -1));
+            return (0, currentMove);
         }
 
         int bestScore = -1;
@@ -89,17 +89,23 @@ public record GameBoard
                 score += testBoard.SimulateForward();
             }
 
-            // Only search deeper if the current depth is greater than 1
             if (depth > 1)
             {
-                var futureResult = DepthLimitedSearch(testBoard, depth - 1);
+                var futureResult = DepthLimitedSearch(testBoard, depth - 1, move);
                 score += futureResult.score;
             }
 
             if (score > bestScore)
             {
                 bestScore = score;
-                bestMove = move;
+                if (depth == 1)
+                {
+                    bestMove = currentMove;
+                }
+                else
+                {
+                    bestMove = move;
+                }
             }
         }
 
