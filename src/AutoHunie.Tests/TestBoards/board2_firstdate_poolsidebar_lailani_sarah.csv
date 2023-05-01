@@ -1,0 +1,7 @@
+Romance,Sentiment,Flirtation,Talent,Talent,Romance,Flirtation,Passion,Talent
+Sentiment,Talent,Romance,Romance,Flirtation,Romance,BrokenHeart,Flirtation,BrokenHeart
+Romance,Passion,Stamina,Joy,Sexuality,Sexuality,Sentiment,BrokenHeart,Passion
+Talent,Sentiment,Joy,Joy,BrokenHeart,Passion,Passion,Talent,Romance
+Talent,Sexuality,Flirtation,Passion,Talent,Sentiment,Romance,Passion,Romance
+Flirtation,Passion,Joy,Stamina,Sentiment,Talent,Stamina,Joy,Passion
+Passion,Stamina,Joy,Flirtation,Flirtation,Talent,Romance,Sexuality,Joy

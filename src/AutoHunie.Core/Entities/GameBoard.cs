@@ -3,7 +3,7 @@ using System.Text;
 
 namespace AutoHunie.Core.Entities;
 
-public record GameBoard
+public class GameBoard
 {
     public const int NumberOfColumns = 9;
     public const int NumberOfRows = 7;
@@ -80,7 +80,7 @@ public record GameBoard
 
         foreach (var move in possibleMoves)
         {
-            GameBoard testBoard = board with { };
+            GameBoard testBoard = board.DeepCopy();
             testBoard.SlideToken(move.x, move.y, move.newX, move.newY);
 
             int score = 0;
@@ -270,6 +270,21 @@ public record GameBoard
         }
     }
 
+    public GameBoard DeepCopy()
+    {
+        Token[,] tokens = (Token[,])_tokens.Clone();
+        var newBoard = new GameBoard(Columns, Rows);
+        for (var y = 0; y < Rows; y++)
+        {
+            for (var x = 0; x < Columns; x++)
+            {
+                newBoard.SetToken(x, y, _tokens[x, y]);
+            }
+        }
+
+        return newBoard;
+    }
+
     public override string ToString()
     {
         var sb = new StringBuilder();
@@ -277,7 +292,7 @@ public record GameBoard
         {
             for (var x = 0; x < Columns; x++)
             {
-                sb.Append(_tokens[x, y].ToString());
+                sb.Append(_tokens[x, y]?.ToString() ?? "NULL");
             }
             sb.Append('\n');
         }
@@ -394,5 +409,27 @@ public record GameBoard
         SlideToken(move.FromX, move.FromY, direction, source, destionation);
 
         return this;
+    }
+
+    public override bool Equals(object obj)
+    {
+        if (obj == null || GetType() != obj.GetType())
+            return false;
+
+        GameBoard other = (GameBoard)obj;
+
+        if (Columns != other.Columns || Rows != other.Rows)
+            return false;
+
+        for (var x = 0; x < Columns; x++)
+        {
+            for (var y = 0; y < Rows; y++)
+            {
+                if (GetTokenSafe(x, y) != other.GetTokenSafe(x, y))
+                    return false;
+            }
+        }
+
+        return true;
     }
 }
