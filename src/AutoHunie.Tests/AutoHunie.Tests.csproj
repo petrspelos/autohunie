@@ -27,94 +27,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="TestBoards\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="TestBoards\board10_firstdate_cruiseship_nora_candace.csv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="TestBoards\board10_firstdate_cruiseship_nora_candace.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="TestBoards\board11_firstdate_rooftoplounge_polly_brooke.csv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="TestBoards\board11_firstdate_rooftoplounge_polly_brooke.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="TestBoards\board12_firstdate_secretgrotto_abia_jessie.csv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="TestBoards\board12_firstdate_secretgrotto_abia_jessie.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="TestBoards\board13_firstdate_secludedcabana_lailani_lillian.csv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="TestBoards\board13_firstdate_secludedcabana_lailani_lillian.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="TestBoards\board1_tutorial.csv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="TestBoards\board1_tutorial.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="TestBoards\board2_firstdate_poolsidebar_lailani_sarah.csv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="TestBoards\board2_firstdate_poolsidebar_lailani_sarah.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="TestBoards\board3_firstdate_casino_lola_abia.csv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="TestBoards\board3_firstdate_casino_lola_abia.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="TestBoards\board4_firstdate_secretgrotto_ashley_polly.csv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="TestBoards\board4_firstdate_secretgrotto_ashley_polly.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="TestBoards\board5_firstdate_secludedcabana_lailani_jessie.csv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="TestBoards\board5_firstdate_secludedcabana_lailani_jessie.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="TestBoards\board6_firstdate_golfcourse_ashley_lillian.csv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="TestBoards\board6_firstdate_golfcourse_ashley_lillian.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="TestBoards\board7_firstdate_rooftoplounge_lola_nora.csv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="TestBoards\board7_firstdate_rooftoplounge_lola_nora.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="TestBoards\board8_firstdate_royalsuite_jessie_brooke.csv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="TestBoards\board8_firstdate_royalsuite_jessie_brooke.cvs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="TestBoards\board8_firstdate_royalsuite_jessie_brooke.cvs.csv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="TestBoards\board8_firstdate_royalsuite_jessie_brooke.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="TestBoards\board9_firstdate_massagespa_lillian_zoey.csv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="TestBoards\board9_firstdate_massagespa_lillian_zoey.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+      <None Include="TestBoards\**">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
   </ItemGroup>
 
 </Project>
