@@ -1,6 +1,5 @@
 ﻿using AutoHunie.ConsoleApp;
 using AutoHunie.ConsoleApp.Entities;
-using AutoHunie.ConsoleApp.UI;
 using AutoHunie.Core;
 using AutoHunie.Core.Entities;
 
@@ -12,11 +11,7 @@ if (Screen.PrimaryScreen is null)
 
 var transparentColor = Color.Magenta;
 
-var ui = new WindowsUi();
-
 IImageProcessing imgProcessing = new WindowsImageProcessing();
-
-ui.InitializeUi();
 
 var form = new Form
 {

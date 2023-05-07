@@ -104,6 +104,17 @@ public class GameBoardTests
     }
 
     [Fact]
+    public void HasMatch_GivenUnknowns_ShouldReturnFalse()
+    {
+        var board = new GameBoard(3, 2);
+
+        board.SetRow(0, new[] { new Token(TokenType.Unknown), new Token(TokenType.Unknown), new Token(TokenType.Unknown) });
+        board.SetRow(1, new[] { new Token(TokenType.Unknown), new Token(TokenType.Unknown), new Token(TokenType.Unknown) });
+
+        Assert.False(board.HasMatch());
+    }
+
+    [Fact]
     public void FindAllPossibleMoves_GivenBoardWithMatches_ShouldThrow()
     {
         var board = new GameBoard(3, 2);
