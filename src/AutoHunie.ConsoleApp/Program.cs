@@ -1,8 +1,8 @@
 ﻿using AutoHunie.ConsoleApp;
 using AutoHunie.ConsoleApp.Entities;
+using AutoHunie.ConsoleApp.UI;
 using AutoHunie.Core;
 using AutoHunie.Core.Entities;
-using System.Drawing.Imaging;
 
 Console.Clear();
 Logo.Draw();
@@ -12,7 +12,11 @@ if (Screen.PrimaryScreen is null)
 
 var transparentColor = Color.Magenta;
 
+var ui = new WindowsUi();
+
 IImageProcessing imgProcessing = new WindowsImageProcessing();
+
+ui.InitializeUi();
 
 var form = new Form
 {
@@ -324,7 +328,7 @@ playNextMove.Click += async (sender, args) =>
             var boardImg = imgProcessing.GetExpectedBoardScreenshot();
             var board = imgProcessing.RecognizeBoard(boardImg);
 
-            var bestMove = board.FindBestMoveConsideringFuture(10);
+            var bestMove = board.FindBestMoveConsideringFuture(5);
             var move = new GameMove(bestMove.x, bestMove.y, bestMove.newX, bestMove.newY);
             var (fromX, fromY, toX, toY) = imgProcessing.GetScreenCoordinatesFromMove(move);
 

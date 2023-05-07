@@ -91,4 +91,26 @@ public class GameBoardTests
         Assert.Equal(new Token(TokenType.Romance), column[0]);
         Assert.Equal(new Token(TokenType.Joy), column[1]);
     }
+
+    [Fact]
+    public void HasMatch_GivenNoMatches_ShouldReturnFalse()
+    {
+        var board = new GameBoard(3, 2);
+
+        board.SetRow(0, new[] { new Token(TokenType.BrokenHeart), new Token(TokenType.Romance), new Token(TokenType.Romance) });
+        board.SetRow(1, new[] { new Token(TokenType.Stamina), new Token(TokenType.Passion), new Token(TokenType.BrokenHeart) });
+
+        Assert.False(board.HasMatch());
+    }
+
+    [Fact]
+    public void FindAllPossibleMoves_GivenBoardWithMatches_ShouldThrow()
+    {
+        var board = new GameBoard(3, 2);
+
+        board.SetRow(0, new[] { new Token(TokenType.Romance), new Token(TokenType.Romance), new Token(TokenType.Romance) });
+        board.SetRow(1, new[] { new Token(TokenType.Stamina), new Token(TokenType.Passion), new Token(TokenType.BrokenHeart) });
+
+        Assert.Throws<InvalidOperationException>(board.FindAllPossibleMoves);
+    }
 }

@@ -307,17 +307,11 @@ public class GameBoard
             p.Y < Rows;
 
     public bool HasMatch()
-    {
-        return Where((token, x, y) =>
-        {
-            return
-                (token != new Token(TokenType.Unknown)) &&
-                (
-                    (GetTokenSafe(x + 1, y) == token && GetTokenSafe(x - 1, y) == token) ||
-                    (GetTokenSafe(x, y + 1) == token && GetTokenSafe(x, y - 1) == token)
-                );
-        }).Any();
-    }
+        => Where((token, x, y)
+            => token is not null && token != new Token(TokenType.Unknown) &&
+                ((GetTokenSafe(x + 1, y) == token && GetTokenSafe(x - 1, y) == token) ||
+                (GetTokenSafe(x, y + 1) == token && GetTokenSafe(x, y - 1) == token)))
+        .Any();
 
     public int SimulateForward()
     {
