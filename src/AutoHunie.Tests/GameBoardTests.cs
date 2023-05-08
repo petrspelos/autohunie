@@ -115,6 +115,14 @@ public class GameBoardTests
     }
 
     [Fact]
+    public void HasMatch_GivenNulls_ShouldReturnFalse()
+    {
+        var board = new GameBoard(3, 2);
+
+        Assert.False(board.HasMatch());
+    }
+
+    [Fact]
     public void FindAllPossibleMoves_GivenBoardWithMatches_ShouldThrow()
     {
         var board = new GameBoard(3, 2);
@@ -123,5 +131,114 @@ public class GameBoardTests
         board.SetRow(1, new[] { new Token(TokenType.Stamina), new Token(TokenType.Passion), new Token(TokenType.BrokenHeart) });
 
         Assert.Throws<InvalidOperationException>(board.FindAllPossibleMoves);
+    }
+
+    [Theory]
+    [InlineData(-1, -5000)]
+    [InlineData(3, 2)]
+    [InlineData(1, 2)]
+    [InlineData(3, 1)]
+    [InlineData(999, 555)]
+    public void GetTokenSafe_GivenOutsideCoordinates_ShouldReturnUnknown(int x, int y)
+    {
+        var board = new GameBoard(3, 2);
+
+        board.SetRow(0, new[] { new Token(TokenType.Romance), new Token(TokenType.Romance), new Token(TokenType.Romance) });
+        board.SetRow(1, new[] { new Token(TokenType.Stamina), new Token(TokenType.Passion), new Token(TokenType.BrokenHeart) });
+
+        var actual = board.GetTokenSafe(x, y);
+
+        Assert.Equal(TokenType.Unknown, actual.Type);
+    }
+
+    [Theory]
+    [InlineData(0, 0, TokenType.Romance)]
+    [InlineData(1, 1, TokenType.Passion)]
+    [InlineData(2, 1, TokenType.Joy)]
+    public void GetTokenSafe_GivenValidCoordinates_ShouldReturnToken(int x, int y, TokenType expectedType)
+    {
+        var board = new GameBoard(3, 2);
+
+        board.SetRow(0, new[] { new Token(TokenType.Romance), new Token(TokenType.BrokenHeart), new Token(TokenType.Talent) });
+        board.SetRow(1, new[] { new Token(TokenType.Stamina), new Token(TokenType.Passion), new Token(TokenType.Joy) });
+
+        var actual = board.GetTokenSafe(x, y);
+
+        Assert.Equal(expectedType, actual.Type);
+    }
+
+    [Fact]
+    public void SlideToken_GivenDiagonalSlide_ShouldThrow()
+    {
+        var board = new GameBoard(3, 3);
+
+        board.SetRow(0, new[] { new Token(TokenType.Romance), new Token(TokenType.BrokenHeart), new Token(TokenType.Talent) });
+        board.SetRow(1, new[] { new Token(TokenType.Stamina), new Token(TokenType.Passion), new Token(TokenType.Joy) });
+        board.SetRow(2, new[] { new Token(TokenType.Flirtation), new Token(TokenType.Sentiment), new Token(TokenType.Sexuality) });
+
+        Assert.Throws<InvalidOperationException>(() => board.SlideToken(0, 0, 1, 1));
+    }
+
+    [Fact]
+    public void SlideToken_GivenHorizontalMove_ShouldSlide()
+    {
+        var expectedBoard = new GameBoard(3, 3);
+
+        expectedBoard.SetRow(0, new[] { new Token(TokenType.BrokenHeart), new Token(TokenType.Talent), new Token(TokenType.Romance) });
+        expectedBoard.SetRow(1, new[] { new Token(TokenType.Stamina), new Token(TokenType.Passion), new Token(TokenType.Joy) });
+        expectedBoard.SetRow(2, new[] { new Token(TokenType.Flirtation), new Token(TokenType.Sentiment), new Token(TokenType.Sexuality) });
+
+
+        var board = new GameBoard(3, 3);
+
+        board.SetRow(0, new[] { new Token(TokenType.Romance), new Token(TokenType.BrokenHeart), new Token(TokenType.Talent) });
+        board.SetRow(1, new[] { new Token(TokenType.Stamina), new Token(TokenType.Passion), new Token(TokenType.Joy) });
+        board.SetRow(2, new[] { new Token(TokenType.Flirtation), new Token(TokenType.Sentiment), new Token(TokenType.Sexuality) });
+
+        board.SlideToken(0, 0, 2, 0);
+
+        Assert.Equal(expectedBoard, board);
+    }
+
+    [Fact]
+    public void SlideToken_GivenInverseHorizontalMove_ShouldSlide()
+    {
+        var expectedBoard = new GameBoard(3, 3);
+
+        expectedBoard.SetRow(0, new[] { new Token(TokenType.Talent), new Token(TokenType.Romance), new Token(TokenType.BrokenHeart) });
+        expectedBoard.SetRow(1, new[] { new Token(TokenType.Stamina), new Token(TokenType.Passion), new Token(TokenType.Joy) });
+        expectedBoard.SetRow(2, new[] { new Token(TokenType.Flirtation), new Token(TokenType.Sentiment), new Token(TokenType.Sexuality) });
+
+
+        var board = new GameBoard(3, 3);
+
+        board.SetRow(0, new[] { new Token(TokenType.Romance), new Token(TokenType.BrokenHeart), new Token(TokenType.Talent) });
+        board.SetRow(1, new[] { new Token(TokenType.Stamina), new Token(TokenType.Passion), new Token(TokenType.Joy) });
+        board.SetRow(2, new[] { new Token(TokenType.Flirtation), new Token(TokenType.Sentiment), new Token(TokenType.Sexuality) });
+
+        board.SlideToken(2, 0, 0, 0);
+
+        Assert.Equal(expectedBoard, board);
+    }
+
+    [Fact]
+    public void SlideToken_GivenVerticalMove_ShouldSlide()
+    {
+        var expectedBoard = new GameBoard(3, 3);
+
+        expectedBoard.SetRow(0, new[] { new Token(TokenType.Stamina), new Token(TokenType.BrokenHeart), new Token(TokenType.Talent) });
+        expectedBoard.SetRow(1, new[] { new Token(TokenType.Flirtation), new Token(TokenType.Passion), new Token(TokenType.Joy) });
+        expectedBoard.SetRow(2, new[] { new Token(TokenType.Romance), new Token(TokenType.Sentiment), new Token(TokenType.Sexuality) });
+
+
+        var board = new GameBoard(3, 3);
+
+        board.SetRow(0, new[] { new Token(TokenType.Romance), new Token(TokenType.BrokenHeart), new Token(TokenType.Talent) });
+        board.SetRow(1, new[] { new Token(TokenType.Stamina), new Token(TokenType.Passion), new Token(TokenType.Joy) });
+        board.SetRow(2, new[] { new Token(TokenType.Flirtation), new Token(TokenType.Sentiment), new Token(TokenType.Sexuality) });
+
+        board.SlideToken(0, 0, 0, 2);
+
+        Assert.Equal(expectedBoard, board);
     }
 }

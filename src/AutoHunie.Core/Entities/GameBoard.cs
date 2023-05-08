@@ -215,7 +215,7 @@ public class GameBoard
         SlideToken(x, y, direction, source, destionation);
     }
 
-    public void SlideToken(int x, int y, SlideDirection direction, int source, int destination)
+    private void SlideToken(int x, int y, SlideDirection direction, int source, int destination)
     {
         var line = direction == SlideDirection.Horizontal ? GetRow(y) : GetColumn(x);
 
@@ -259,17 +259,6 @@ public class GameBoard
             SetColumn(x, result);
     }
 
-    public void Draw()
-    {
-        for (var y = 0; y < Rows; y++)
-        {
-            for (var x = 0; x < Columns; x++)
-            {
-                _tokens[x, y].Draw();
-            }
-        }
-    }
-
     public GameBoard DeepCopy()
     {
         Token[,] tokens = (Token[,])_tokens.Clone();
@@ -300,12 +289,6 @@ public class GameBoard
         return sb.ToString();
     }
 
-    public bool IsInBounds(Point p)
-        => p.X >= 0 &&
-            p.X < Columns &&
-            p.Y >= 0 &&
-            p.Y < Rows;
-
     public bool HasMatch()
         => Where((token, x, y)
             => token is not null && token != new Token(TokenType.Unknown) &&
@@ -334,7 +317,7 @@ public class GameBoard
             // add to score
             // TODO: different points for different types (+ settings for these)
             if (token == new Token(TokenType.BrokenHeart))
-                score -= 250;
+                score -= 1000;
             else if (token == new Token(TokenType.Stamina))
                 score += 2;
             else if (token == new Token(TokenType.Romance))
@@ -352,7 +335,7 @@ public class GameBoard
             score += matches.Count() * 100;
         }
 
-        System.Console.WriteLine($"score: {score} - matches: {matches.Count()}");
+        Console.WriteLine($"score: {score} - matches: {matches.Count()}");
 
         for (var i = 0; i < Columns; i++)
         {
@@ -393,17 +376,8 @@ public class GameBoard
         return hash;
     }
 
-    public GameBoard ApplyMove(GameMove move)
-    {
-        var direction = move.FromX == move.ToX ? SlideDirection.Vertical : SlideDirection.Horizontal;
-
-        var source = direction == SlideDirection.Horizontal ? move.FromX : move.FromY;
-        var destionation = direction == SlideDirection.Horizontal ? move.ToX : move.ToY;
-
-        SlideToken(move.FromX, move.FromY, direction, source, destionation);
-
-        return this;
-    }
+    public void ApplyMove(GameMove move)
+        => SlideToken(move.FromX, move.FromY, move.ToX, move.ToY);
 
     public override bool Equals(object obj)
     {

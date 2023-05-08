@@ -28,6 +28,7 @@ var form = new Form
 
 var tabControl = new TabControl
 {
+    Location = new Point(0, 50),
     Size = new Size(336, 376)
 };
 
@@ -323,7 +324,7 @@ playNextMove.Click += async (sender, args) =>
             var boardImg = imgProcessing.GetExpectedBoardScreenshot();
             var board = imgProcessing.RecognizeBoard(boardImg);
 
-            var bestMove = board.FindBestMoveConsideringFuture(5);
+            var bestMove = board.FindBestMoveConsideringFuture(2);
             var move = new GameMove(bestMove.x, bestMove.y, bestMove.newX, bestMove.newY);
             var (fromX, fromY, toX, toY) = imgProcessing.GetScreenCoordinatesFromMove(move);
 
@@ -337,7 +338,6 @@ playNextMove.Click += async (sender, args) =>
             WindowsApi.ReleaseMouseButton();
             await Task.Delay(TimeSpan.FromSeconds(0.5));
             WindowsApi.MoveCursorToPointScreenSpace(0, 0);
-            WindowsApi.DoMouseClick();
             await Task.Delay(TimeSpan.FromSeconds(5));
         }
     }
