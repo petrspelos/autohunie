@@ -178,8 +178,8 @@ form.Controls.Add(tabControl);
 
 var settingsPanel = new Panel
 {
-    Location = new Point(Screen.PrimaryScreen.Bounds.Width - 210, 10),
-    Size = new Size(200, 300),
+    Location = new Point(Screen.PrimaryScreen.Bounds.Width - 210, 50),
+    Size = new Size(200, 750),
     BackColor = Color.Gray
 };
 
@@ -277,6 +277,15 @@ var testMouseButton = new Button
 
 testMouseButton.Click += async (sender, args) =>
 {
+    Console.WriteLine("Talent: " + TokenWeights.Talent);
+    Console.WriteLine("Stamina: " + TokenWeights.Stamina);
+    Console.WriteLine("Joy: " + TokenWeights.Joy);
+    Console.WriteLine("Passion: " + TokenWeights.Passion);
+    Console.WriteLine("Sexuality: " + TokenWeights.Sexuality);
+    Console.WriteLine("Romance: " + TokenWeights.Romance);
+    Console.WriteLine("Flirtation: " + TokenWeights.Flirtation);
+    Console.WriteLine("BrokenHeart: " + TokenWeights.BrokenHeart);
+
     WindowsApi.MoveCursorToPointScreenSpace(1097, 458);
     WindowsApi.DoMouseClick();
     await Task.Delay(TimeSpan.FromSeconds(1));
@@ -305,14 +314,14 @@ var continuePlayingCheck = new CheckBox
     Size = new Size(180, 40),
     Text = "Continue Making Moves",
     ForeColor = Color.Black,
-    Checked = true
+    Checked = false
 };
 
 playNextMove.Click += async (sender, args) =>
 {
     try
     {
-        while (continuePlayingCheck.Checked)
+        do
         {
             if (Directory.Exists("token"))
                 Directory.Delete("tokens", true);
@@ -340,6 +349,7 @@ playNextMove.Click += async (sender, args) =>
             WindowsApi.MoveCursorToPointScreenSpace(0, 0);
             await Task.Delay(TimeSpan.FromSeconds(5));
         }
+        while (continuePlayingCheck.Checked);
     }
     catch (Exception e)
     {
@@ -347,10 +357,58 @@ playNextMove.Click += async (sender, args) =>
     }
 };
 
+var tokenWeightsGroupBox = new GroupBox
+{
+    Text = "Token Weights",
+    Location = new Point(5, 290),
+    Size = new Size(190, 450),
+    ForeColor = Color.White
+};
+
+var tokenImages = new (string, int, Action<int>)[]
+{
+    (@"resources\stamina token trans.png", TokenWeights.Stamina, (int val) => TokenWeights.Stamina = val),
+    (@"resources\sentiment token trans.png", TokenWeights.Sentiment, (int val) => TokenWeights.Stamina = val),
+    (@"resources\joy token trans.png", TokenWeights.Joy, (int val) => TokenWeights.Joy = val),
+    (@"resources\passion token trans.png", TokenWeights.Passion, (int val) => TokenWeights.Passion = val),
+    (@"resources\talent token trans.png", TokenWeights.Talent, (int val) => TokenWeights.Talent = val),
+    (@"resources\sexuality token trans.png", TokenWeights.Sexuality, (int val) => TokenWeights.Sexuality = val),
+    (@"resources\romance token trans.png", TokenWeights.Romance, (int val) => TokenWeights.Romance = val),
+    (@"resources\flirtation token trans.png", TokenWeights.Flirtation, (int val) => TokenWeights.Flirtation = val),
+    (@"resources\broken heart token trans.png", TokenWeights.BrokenHeart, (int val) => TokenWeights.BrokenHeart = val),
+    (@"resources\multiplier.png", TokenWeights.QuadMultiplier, (int val) => TokenWeights.QuadMultiplier = val),
+};
+
+for (var i = 0; i < tokenImages.Length; i++)
+{
+    var (tokenImage, weightValue, setFunc) = tokenImages[i];
+    tokenWeightsGroupBox.Controls.Add(new PictureBox
+    {
+        Image = new Bitmap(tokenImage),
+        InitialImage = null,
+        Location = new Point(10, (42 * i) + 20),
+        Size = new Size(40, 40),
+        SizeMode = PictureBoxSizeMode.Zoom
+    });
+    
+    var weightControl = new NumericUpDown
+    {
+        Minimum = -100000,
+        Maximum = 100000,
+        Value = weightValue,
+        Location = new Point(60, (42 * i) + 20),
+        Size = new Size(85, 40)
+    };
+    weightControl.ValueChanged += (object? sender, EventArgs args) => setFunc?.Invoke((int)weightControl.Value);
+
+    tokenWeightsGroupBox.Controls.Add(weightControl);
+}
+
 settingsPanel.Controls.Add(moveGameGroupBox);
 settingsPanel.Controls.Add(testMouseButton);
 settingsPanel.Controls.Add(playNextMove);
 settingsPanel.Controls.Add(continuePlayingCheck);
+settingsPanel.Controls.Add(tokenWeightsGroupBox);
 
 form.Controls.Add(settingsPanel);
 

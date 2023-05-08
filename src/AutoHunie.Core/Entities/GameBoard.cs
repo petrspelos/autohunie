@@ -312,30 +312,49 @@ public class GameBoard
                 (GetTokenSafe(x, y + 1) == token && GetTokenSafe(x, y + 2) == token)); //two bellow
         });
 
+        int positiveTokens = 0;
+        int negativeTokens = 0;
+
         foreach (var (pos, token) in matches)
         {
             // add to score
-            // TODO: different points for different types (+ settings for these)
-            if (token == new Token(TokenType.BrokenHeart))
-                score -= 1000;
-            else if (token == new Token(TokenType.Stamina))
-                score += 2;
-            else if (token == new Token(TokenType.Romance))
-                score += 2;
-            else if (token == new Token(TokenType.Unknown))
-                throw new InvalidOperationException("We're popping unknowns?");
-            else
-                score += 10;
+            int tokenValue = token.Type switch
+            {
+                TokenType.Sexuality => TokenWeights.Sexuality,
+                TokenType.Romance => TokenWeights.Romance,
+                TokenType.Flirtation => TokenWeights.Flirtation,
+                TokenType.Talent => TokenWeights.Talent,
+                TokenType.Joy => TokenWeights.Joy,
+                TokenType.BrokenHeart => TokenWeights.BrokenHeart,
+                TokenType.Stamina => TokenWeights.Stamina,
+                TokenType.Sentiment => TokenWeights.Sentiment,
+                TokenType.Passion => TokenWeights.Passion,
+                TokenType.Unknown => throw new InvalidOperationException("We're popping unknowns?"),
+                _ => throw new ArgumentOutOfRangeException()
+            };
 
+            if (tokenValue > 0)
+            {
+                positiveTokens++;
+            }
+            else if (tokenValue < 0)
+            {
+                negativeTokens++;
+            }
+
+            score += tokenValue;
             _tokens[pos.X, pos.Y] = null!;
         }
 
-        if (matches.Count() > 3)
+        if (positiveTokens > 3)
         {
-            score += matches.Count() * 100;
+            score += positiveTokens * TokenWeights.QuadMultiplier;
         }
 
-        Console.WriteLine($"score: {score} - matches: {matches.Count()}");
+        if (negativeTokens > 3)
+        {
+            score -= negativeTokens * TokenWeights.QuadMultiplier * 2;
+        }
 
         for (var i = 0; i < Columns; i++)
         {

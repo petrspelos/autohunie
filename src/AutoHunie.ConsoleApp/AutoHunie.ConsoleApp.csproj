@@ -176,6 +176,9 @@
     <None Update="resources\mouse.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="resources\multiplier.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="resources\Nora head.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
